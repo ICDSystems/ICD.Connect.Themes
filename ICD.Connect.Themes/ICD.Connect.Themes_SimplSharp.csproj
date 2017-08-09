@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="AbstractTheme.cs" />
     <Compile Include="AbstractThemeSettings.cs" />
-    <Compile Include="Extensions\CoreExtensions.cs" />
     <Compile Include="Extensions\DeviceFactoryExtensions.cs" />
     <Compile Include="ITheme.cs" />
     <Compile Include="IThemeSettings.cs" />
