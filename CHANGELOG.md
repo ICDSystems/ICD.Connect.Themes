@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.1.0] - 2019-06-06
+### Added
+ - Add features for activating a user interface, indicating it is ready for human interaction
+
 ## [4.0.0] - 2018-05-24
 ### Removed
  - Removed element property from settings
