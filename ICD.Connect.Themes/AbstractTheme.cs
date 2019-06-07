@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Services;
+using ICD.Connect.API.Commands;
+using ICD.Connect.Partitioning.Rooms;
 using ICD.Connect.Settings;
 using ICD.Connect.Settings.Cores;
 using ICD.Connect.Settings.Originators;
+using ICD.Connect.Themes.UserInterfaceFactories;
+using ICD.Connect.Themes.UserInterfaces;
 
 namespace ICD.Connect.Themes
 {
@@ -12,6 +17,32 @@ namespace ICD.Connect.Themes
 	{
 		private bool m_CoreSettingsApplied;
 		private ICore m_Core;
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		protected AbstractTheme()
+		{
+			IcdEnvironment.OnProgramInitializationComplete += IcdEnvironmentOnProgramInitializationComplete;
+		}
+
+		/// <summary>
+		/// Override to release resources.
+		/// </summary>
+		/// <param name="disposing"></param>
+		protected override void DisposeFinal(bool disposing)
+		{
+			base.DisposeFinal(disposing);
+
+			ClearUserInterfaces();
+		}
+
+		#region Methods
+
+		/// <summary>
+		/// Gets the UI Factories.
+		/// </summary>
+		public abstract IEnumerable<IUserInterfaceFactory> GetUiFactories();
 
 		/// <summary>
 		/// Clears the instantiated user interfaces.
@@ -23,23 +54,7 @@ namespace ICD.Connect.Themes
 		/// </summary>
 		public abstract void BuildUserInterfaces();
 
-		/// <summary>
-		/// Override to clear the instance settings.
-		/// </summary>
-		protected override void ClearSettingsFinal()
-		{
-			base.ClearSettingsFinal();
-
-			ClearUserInterfaces();
-		}
-
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		protected AbstractTheme()
-		{
-			IcdEnvironment.OnProgramInitializationComplete += IcdEnvironmentOnProgramInitializationComplete;
-		}
+		#endregion
 
 		/// <summary>
 		/// Override to apply settings to the instance.
@@ -56,16 +71,9 @@ namespace ICD.Connect.Themes
 		}
 
 		/// <summary>
-		/// Override to release resources.
+		/// Called once both the core and the application have finished loading.
+		/// Override this method to enable touch panels.
 		/// </summary>
-		/// <param name="disposing"></param>
-		protected override void DisposeFinal(bool disposing)
-		{
-			base.DisposeFinal(disposing);
-
-			ClearUserInterfaces();
-		}
-
 		protected virtual void ActivateUserInterfaces()
 		{
 		}
@@ -135,6 +143,50 @@ namespace ICD.Connect.Themes
 		{
 			if (m_CoreSettingsApplied && IcdEnvironment.ProgramIsInitialized)
 				ActivateUserInterfaces();
+		}
+
+		#endregion
+
+		#region Console
+
+		/// <summary>
+		/// Gets the child console commands.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<IConsoleCommand> GetConsoleCommands()
+		{
+			foreach (IConsoleCommand command in GetBaseConsoleCommands())
+				yield return command;
+
+			yield return new ConsoleCommand("PrintUIs", "Prints information about the current UIs", () => ConsolePrintUis());
+		}
+
+		/// <summary>
+		/// Workaround for "unverifiable code" warning.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<IConsoleCommand> GetBaseConsoleCommands()
+		{
+			return base.GetConsoleCommands();
+		}
+
+		private string ConsolePrintUis()
+		{
+			TableBuilder builder = new TableBuilder("Type", "Room", "Target");
+
+			foreach (IUserInterfaceFactory factory in GetUiFactories())
+			{
+				foreach (IUserInterface ui in factory.GetUserInterfaces())
+				{
+					Type type = ui.GetType();
+					IRoom room = ui.Room;
+					object target = ui.Target;
+
+					builder.AddRow(type, room, target);
+				}
+			}
+
+			return builder.ToString();
 		}
 
 		#endregion
