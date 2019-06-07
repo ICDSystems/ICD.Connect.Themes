@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.2.0] - 2019-06-07
+### Added
+ - Added abstractions and interfaces for UIs and UI Factories
+
 ## [4.1.0] - 2019-06-06
 ### Added
  - Add features for activating a user interface, indicating it is ready for human interaction
