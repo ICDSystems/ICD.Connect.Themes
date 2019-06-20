@@ -35,6 +35,10 @@ namespace ICD.Connect.Themes.UserInterfaceFactories
 		/// <summary>
 		/// Activates this user interface.
 		/// </summary>
-		public abstract void ActivateUserInterfaces();
+		public virtual void ActivateUserInterfaces()
+		{
+			foreach (IUserInterface ui in GetUserInterfaces())
+				ui.Activate();
+		}
 	}
 }
