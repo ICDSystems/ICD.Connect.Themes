@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added default implementation for AbstractTheme ActiveUserInterfaces method
+
 ## [4.2.0] - 2019-06-07
 ### Added
  - Added abstractions and interfaces for UIs and UI Factories

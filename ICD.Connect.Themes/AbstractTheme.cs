@@ -76,6 +76,8 @@ namespace ICD.Connect.Themes
 		/// </summary>
 		protected virtual void ActivateUserInterfaces()
 		{
+			foreach (IUserInterfaceFactory factory in GetUiFactories())
+				factory.ActivateUserInterfaces();
 		}
 
 		#region Program Initialization Callbacks
