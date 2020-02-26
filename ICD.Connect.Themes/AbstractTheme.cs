@@ -19,11 +19,17 @@ namespace ICD.Connect.Themes
 		private ICore m_Core;
 
 		/// <summary>
+		/// Gets the Core instance.
+		/// </summary>
+		public ICore Core { get { return m_Core ?? (m_Core = ServiceProvider.TryGetService<ICore>()); } }
+
+		/// <summary>
 		/// Constructor.
 		/// </summary>
 		protected AbstractTheme()
 		{
 			IcdEnvironment.OnProgramInitializationComplete += IcdEnvironmentOnProgramInitializationComplete;
+			Core.OnSettingsApplied += CoreOnSettingsApplied;
 		}
 
 		/// <summary>
@@ -32,6 +38,9 @@ namespace ICD.Connect.Themes
 		/// <param name="disposing"></param>
 		protected override void DisposeFinal(bool disposing)
 		{
+			IcdEnvironment.OnProgramInitializationComplete -= IcdEnvironmentOnProgramInitializationComplete;
+			Core.OnSettingsApplied -= CoreOnSettingsApplied;
+
 			base.DisposeFinal(disposing);
 
 			ClearUserInterfaces();
@@ -63,9 +72,9 @@ namespace ICD.Connect.Themes
 		/// <param name="factory"></param>
 		protected override void ApplySettingsFinal(TSettings settings, IDeviceFactory factory)
 		{
-			SetCore(ServiceProvider.TryGetService<ICore>());
-
 			base.ApplySettingsFinal(settings, factory);
+
+			m_CoreSettingsApplied = false;
 
 			BuildUserInterfaces();
 		}
@@ -81,43 +90,6 @@ namespace ICD.Connect.Themes
 		}
 
 		#region Program Initialization Callbacks
-
-		private void SetCore(ICore core)
-		{
-			if (core == m_Core)
-				return;
-
-			Unsubscribe(m_Core);
-
-			m_Core = core;
-			m_CoreSettingsApplied = false;
-
-			Subscribe(m_Core);
-		}
-
-		/// <summary>
-		/// Subscribe to the core events.
-		/// </summary>
-		/// <param name="core"></param>
-		private void Subscribe(ICore core)
-		{
-			if (core == null)
-				return;
-
-			core.OnSettingsApplied += CoreOnSettingsApplied;
-		}
-
-		/// <summary>
-		/// Unsubscribe from the core events.
-		/// </summary>
-		/// <param name="core"></param>
-		private void Unsubscribe(ICore core)
-		{
-			if (core == null)
-				return;
-
-			core.OnSettingsApplied -= CoreOnSettingsApplied;
-		}
 
 		/// <summary>
 		/// Called when the Core finishes applying settings.
