@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ICD.Connect.Partitioning.Rooms;
 using ICD.Connect.Themes.UserInterfaces;
 
 namespace ICD.Connect.Themes.UserInterfaceFactories
@@ -26,11 +25,6 @@ namespace ICD.Connect.Themes.UserInterfaceFactories
 		/// Assigns the rooms to the existing user interfaces.
 		/// </summary>
 		void ReassignUserInterfaces();
-
-		/// <summary>
-		/// Assigns the rooms to the existing user interfaces.
-		/// </summary>
-		void AssignUserInterfaces(IEnumerable<IRoom> rooms);
 
 		/// <summary>
 		/// Activates this user interface.

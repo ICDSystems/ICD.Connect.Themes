@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.0.0] - 2020-02-26
+### Changed
+ - Moved common UI factory implementation details into abstractions
+ - Better handling of UI to Room bindings, particularly in room-combine systems
+ - Fixed a bug where UIs would not have their room cleared when the room is part of a combine space
+
 ## [4.3.0] - 2019-09-16
 ### Added
  - Added default implementation for AbstractTheme ActiveUserInterfaces method

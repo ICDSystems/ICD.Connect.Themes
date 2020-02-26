@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ICD.Connect.Settings.Cores;
 using ICD.Connect.Settings.Originators;
 using ICD.Connect.Themes.UserInterfaceFactories;
 
@@ -6,6 +7,11 @@ namespace ICD.Connect.Themes
 {
 	public interface ITheme : IOriginator
 	{
+		/// <summary>
+		/// Gets the Core instance.
+		/// </summary>
+		ICore Core { get; }
+
 		/// <summary>
 		/// Gets the UI Factories.
 		/// </summary>
