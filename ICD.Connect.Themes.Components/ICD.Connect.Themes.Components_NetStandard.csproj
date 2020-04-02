@@ -42,8 +42,6 @@
     <ProjectReference Include="..\..\ICD.Connect.Panels\ICD.Connect.Panels.Crestron\ICD.Connect.Panels.Crestron_NetStandard.csproj" />
     <ProjectReference Include="..\..\ICD.Connect.Panels\ICD.Connect.Panels\ICD.Connect.Panels_NetStandard.csproj" />
     <ProjectReference Include="..\..\ICD.Connect.Settings\ICD.Connect.Settings\ICD.Connect.Settings_NetStandard.csproj" />
-    <ProjectReference Include="..\ICD.Connect.Panels.Crestron\ICD.Connect.Panels.Crestron_NetStandard.csproj" />
-    <ProjectReference Include="..\ICD.Connect.Panels\ICD.Connect.Panels_NetStandard.csproj" />
   </ItemGroup>
 
 </Project>
