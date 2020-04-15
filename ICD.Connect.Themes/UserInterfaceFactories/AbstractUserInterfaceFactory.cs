@@ -6,6 +6,7 @@ using ICD.Common.Utils;
 using ICD.Common.Utils.Collections;
 using ICD.Common.Utils.Extensions;
 using ICD.Connect.Partitioning.Extensions;
+using ICD.Connect.Partitioning.PartitionManagers;
 using ICD.Connect.Partitioning.Rooms;
 using ICD.Connect.Themes.UserInterfaces;
 
@@ -157,7 +158,10 @@ namespace ICD.Connect.Themes.UserInterfaceFactories
 		/// <returns></returns>
 		private IEnumerable<IRoom> GetRooms()
 		{
-			return m_Theme.Core.GetPartitionManager().GetTopLevelRooms();
+			IPartitionManager manager;
+			return m_Theme.Core.TryGetPartitionManager(out manager)
+				       ? manager.GetTopLevelRooms()
+				       : Enumerable.Empty<IRoom>();
 		}
 
 		#endregion
