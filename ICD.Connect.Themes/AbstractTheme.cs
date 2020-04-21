@@ -18,10 +18,19 @@ namespace ICD.Connect.Themes
 		private bool m_CoreSettingsApplied;
 		private ICore m_Core;
 
+		#region Properties
+
+		/// <summary>
+		/// Gets the category for this originator type (e.g. Device, Port, etc)
+		/// </summary>
+		public override string Category { get { return "Theme"; } }
+
 		/// <summary>
 		/// Gets the Core instance.
 		/// </summary>
 		public ICore Core { get { return m_Core ?? (m_Core = ServiceProvider.TryGetService<ICore>()); } }
+
+		#endregion
 
 		/// <summary>
 		/// Constructor.
