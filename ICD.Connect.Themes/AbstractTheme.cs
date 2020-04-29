@@ -13,7 +13,7 @@ using ICD.Connect.Themes.UserInterfaces;
 namespace ICD.Connect.Themes
 {
 	public abstract class AbstractTheme<TSettings> : AbstractOriginator<TSettings>, ITheme
-		where TSettings : AbstractThemeSettings, new()
+		where TSettings : IThemeSettings, new()
 	{
 		private bool m_CoreSettingsApplied;
 		private ICore m_Core;
