@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+ - Relaxed AbstractTheme settings type contraint
+
 ## [5.0.0] - 2020-02-26
 ### Changed
  - Moved common UI factory implementation details into abstractions
