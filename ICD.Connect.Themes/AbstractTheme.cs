@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
-using ICD.Common.Utils.Services;
 using ICD.Connect.API.Commands;
 using ICD.Connect.Partitioning.Rooms;
 using ICD.Connect.Settings;
-using ICD.Connect.Settings.Cores;
 using ICD.Connect.Settings.Originators;
 using ICD.Connect.Themes.UserInterfaceFactories;
 using ICD.Connect.Themes.UserInterfaces;
@@ -17,7 +15,6 @@ namespace ICD.Connect.Themes
 		where TSettings : IThemeSettings, new()
 	{
 		private bool m_CoreSettingsApplied;
-		private ICore m_Core;
 
 		#region Properties
 
@@ -25,11 +22,6 @@ namespace ICD.Connect.Themes
 		/// Gets the category for this originator type (e.g. Device, Port, etc)
 		/// </summary>
 		public override string Category { get { return "Theme"; } }
-
-		/// <summary>
-		/// Gets the Core instance.
-		/// </summary>
-		public ICore Core { get { return m_Core ?? (m_Core = ServiceProvider.TryGetService<ICore>()); } }
 
 		#endregion
 
