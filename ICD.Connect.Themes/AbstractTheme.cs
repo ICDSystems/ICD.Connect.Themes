@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ICD.Common.Utils;
+using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Services;
 using ICD.Connect.API.Commands;
 using ICD.Connect.Partitioning.Rooms;
@@ -39,6 +40,7 @@ namespace ICD.Connect.Themes
 		{
 			IcdEnvironment.OnProgramInitializationComplete += IcdEnvironmentOnProgramInitializationComplete;
 			Core.OnSettingsApplied += CoreOnSettingsApplied;
+			Core.Originators.OnChildrenChanged += OriginatorsOnChildrenChanged;
 		}
 
 		/// <summary>
@@ -49,6 +51,7 @@ namespace ICD.Connect.Themes
 		{
 			IcdEnvironment.OnProgramInitializationComplete -= IcdEnvironmentOnProgramInitializationComplete;
 			Core.OnSettingsApplied -= CoreOnSettingsApplied;
+			Core.Originators.OnChildrenChanged -= OriginatorsOnChildrenChanged;
 
 			base.DisposeFinal(disposing);
 
@@ -65,38 +68,42 @@ namespace ICD.Connect.Themes
 		/// <summary>
 		/// Clears the instantiated user interfaces.
 		/// </summary>
-		public abstract void ClearUserInterfaces();
+		public void ClearUserInterfaces()
+		{
+			GetUiFactories().ForEach(f => f.Clear());
+		}
 
 		/// <summary>
 		/// Clears and rebuilds the user interfaces.
 		/// </summary>
-		public abstract void BuildUserInterfaces();
+		public void BuildUserInterfaces()
+		{
+			GetUiFactories().ForEach(f => f.BuildUserInterfaces());
+		}
 
 		#endregion
 
-		/// <summary>
-		/// Override to apply settings to the instance.
-		/// </summary>
-		/// <param name="settings"></param>
-		/// <param name="factory"></param>
-		protected override void ApplySettingsFinal(TSettings settings, IDeviceFactory factory)
-		{
-			base.ApplySettingsFinal(settings, factory);
-
-			m_CoreSettingsApplied = false;
-
-			BuildUserInterfaces();
-		}
+		#region Private Methods
 
 		/// <summary>
 		/// Called once both the core and the application have finished loading.
 		/// Override this method to enable touch panels.
 		/// </summary>
-		protected virtual void ActivateUserInterfaces()
+		private void ActivateUserInterfaces()
 		{
 			foreach (IUserInterfaceFactory factory in GetUiFactories())
 				factory.ActivateUserInterfaces();
 		}
+
+		/// <summary>
+		/// Reassigns rooms to the existing user interfaces.
+		/// </summary>
+		private void ReassignRooms()
+		{
+			GetUiFactories().ForEach(f => f.ReassignUserInterfaces());
+		}
+
+		#endregion
 
 		#region Program Initialization Callbacks
 
@@ -113,6 +120,16 @@ namespace ICD.Connect.Themes
 		}
 
 		/// <summary>
+		/// Reassign the UI rooms when originators are added/removed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="eventArgs"></param>
+		private void OriginatorsOnChildrenChanged(object sender, EventArgs eventArgs)
+		{
+			ReassignRooms();
+		}
+
+		/// <summary>
 		/// Called when the IcdEnvironment initialization state changes.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -126,6 +143,24 @@ namespace ICD.Connect.Themes
 		{
 			if (m_CoreSettingsApplied && IcdEnvironment.ProgramIsInitialized)
 				ActivateUserInterfaces();
+		}
+
+		#endregion
+
+		#region Settings
+
+		/// <summary>
+		/// Override to apply settings to the instance.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="factory"></param>
+		protected override void ApplySettingsFinal(TSettings settings, IDeviceFactory factory)
+		{
+			base.ApplySettingsFinal(settings, factory);
+
+			m_CoreSettingsApplied = false;
+
+			BuildUserInterfaces();
 		}
 
 		#endregion
