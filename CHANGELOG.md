@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.0.0] - 2020-06-22
+### Changed
+ - Fixed a bug on program stop where UI factories would attempt to lookup rooms
+ - Common theme logic moved into abstraction
+
 ## [5.0.1] - 2020-04-29
 ### Changed
  - Relaxed AbstractTheme settings type contraint
