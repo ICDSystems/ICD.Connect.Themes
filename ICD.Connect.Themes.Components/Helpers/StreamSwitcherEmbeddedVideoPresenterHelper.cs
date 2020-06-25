@@ -98,7 +98,7 @@ namespace ICD.Connect.Themes.Components.Helpers
 		{
 			int input = info.LocalInput;
 
-			if (m_View.EmbeddedVideoMaxSources <= input)
+			if (input > m_View.EmbeddedVideoMaxSources)
 				return false;
 
 			m_View.EmbeddedVideoSetSource((ushort)input);
