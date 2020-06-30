@@ -85,7 +85,6 @@
     <None Include="ObfuscationSettings.cs" />
     <Compile Include="Helpers\IEnhancedEmbeddedVideoView.cs" />
     <Compile Include="Helpers\StreamSwitcherEmbeddedVideoPresenterHelper.cs" />
-    <Compile Include="KrangPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
