@@ -31,7 +31,11 @@
     <None Remove=".gitignore" />
     <None Remove="ICD.Connect.Themes.Components.projectinfo" />
     <None Remove="ICD.Connect.projectinfo" />
+    <None Remove="ICD.Connect.Themes.projectinfo" />
     <None Remove="ICD.SimplSharp.projectinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ObfuscationSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ICD.Common.Utils\ICD.Common.Utils\ICD.Common.Utils_NetStandard.csproj" />
