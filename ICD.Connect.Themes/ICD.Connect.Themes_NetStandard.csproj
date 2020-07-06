@@ -25,16 +25,12 @@
     <None Remove="SIMPLSharpLogs\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="ObfuscationSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="ICD.Connect.projectinfo" />
     <None Remove="ICD.Connect.Settings_SimplSharp.suo" />
     <None Remove="ICD.SimplSharp.projectinfo" />
     <None Remove="Properties\ControlSystem.cfg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ObfuscationSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ICD.Common.Utils\ICD.Common.Utils\ICD.Common.Utils_NetStandard.csproj" />
