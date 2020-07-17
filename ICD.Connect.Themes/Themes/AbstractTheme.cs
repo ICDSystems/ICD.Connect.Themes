@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using ICD.Common.Logging.LoggingContexts;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
+using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Commands;
+using ICD.Connect.API.Nodes;
 using ICD.Connect.Partitioning.Rooms;
 using ICD.Connect.Settings;
 using ICD.Connect.Settings.Originators;
+using ICD.Connect.Themes.UiBindings;
 using ICD.Connect.Themes.UserInterfaceFactories;
-using ICD.Connect.Themes.UserInterfaces;
 
 namespace ICD.Connect.Themes
 {
 	public abstract class AbstractTheme<TSettings> : AbstractOriginator<TSettings>, ITheme
 		where TSettings : IThemeSettings, new()
 	{
+		private readonly UiBindingCollection m_UiBindings;
+
 		private bool m_CoreSettingsApplied;
 
 		#region Properties
@@ -23,6 +29,11 @@ namespace ICD.Connect.Themes
 		/// </summary>
 		public override string Category { get { return "Theme"; } }
 
+		/// <summary>
+		/// Gets the UI Bindings for the theme.
+		/// </summary>
+		public UiBindingCollection UiBindings { get { return m_UiBindings; } }
+
 		#endregion
 
 		/// <summary>
@@ -30,6 +41,8 @@ namespace ICD.Connect.Themes
 		/// </summary>
 		protected AbstractTheme()
 		{
+			m_UiBindings = new UiBindingCollection();
+
 			IcdEnvironment.OnProgramInitializationComplete += IcdEnvironmentOnProgramInitializationComplete;
 			Core.Originators.OnCollectionChanged += OriginatorsOnCollectionChanged;
 			Core.OnLifecycleStateChanged += CoreOnLifecycleStateChanged;
@@ -141,6 +154,27 @@ namespace ICD.Connect.Themes
 		#region Settings
 
 		/// <summary>
+		/// Override to clear the instance settings.
+		/// </summary>
+		protected override void ClearSettingsFinal()
+		{
+			base.ClearSettingsFinal();
+
+			UiBindings.Clear();
+		}
+
+		/// <summary>
+		/// Override to apply properties to the settings instance.
+		/// </summary>
+		/// <param name="settings"></param>
+		protected override void CopySettingsFinal(TSettings settings)
+		{
+			base.CopySettingsFinal(settings);
+
+			settings.UiBindingSettings.SetRange(UiBindings.Where(b => b.Serialize).Select(b => b.CopySettings()));
+		}
+
+		/// <summary>
 		/// Override to apply settings to the instance.
 		/// </summary>
 		/// <param name="settings"></param>
@@ -152,14 +186,77 @@ namespace ICD.Connect.Themes
 
 			base.ApplySettingsFinal(settings, factory);
 
+			IEnumerable<IUiBinding> uiBindings = GetUiBindings(settings, factory);
+			UiBindings.SetChildren(uiBindings);
+
 			m_CoreSettingsApplied = false;
 
 			BuildUserInterfaces();
 		}
 
+		private IEnumerable<IUiBinding> GetUiBindings(TSettings settings, IDeviceFactory factory)
+		{
+			return GetOriginatorsSkipExceptions<IUiBinding>(settings.UiBindingSettings, factory);
+		}
+
+		private IEnumerable<T> GetOriginatorsSkipExceptions<T>(IEnumerable<ISettings> originatorSettings,
+															   IDeviceFactory factory)
+			where T : class, IOriginator
+		{
+			foreach (ISettings settings in originatorSettings)
+			{
+				T output;
+
+				try
+				{
+					output = factory.GetOriginatorById<T>(settings.Id);
+				}
+				catch (Exception e)
+				{
+					Logger.Log(eSeverity.Error, e, "Failed to instantiate {0} with id {1}", typeof(T).Name, settings.Id);
+					continue;
+				}
+
+				yield return output;
+			}
+		}
+
 		#endregion
 
 		#region Console
+
+		/// <summary>
+		/// Gets the child console nodes.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<IConsoleNodeBase> GetConsoleNodes()
+		{
+			foreach (IConsoleNodeBase node in GetBaseConsoleNodes())
+				yield return node;
+
+			foreach (IConsoleNodeBase node in ThemeConsole.GetConsoleNodes(this))
+				yield return node;
+		}
+
+		/// <summary>
+		/// Wrokaround for "unverifiable code" warning.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<IConsoleNodeBase> GetBaseConsoleNodes()
+		{
+			return base.GetConsoleNodes();
+		}
+
+		/// <summary>
+		/// Calls the delegate for each console status item.
+		/// </summary>
+		/// <param name="addRow"></param>
+		public override void BuildConsoleStatus(AddStatusRowDelegate addRow)
+		{
+			base.BuildConsoleStatus(addRow);
+
+			ThemeConsole.BuildConsoleStatus(this, addRow);
+		}
 
 		/// <summary>
 		/// Gets the child console commands.
@@ -170,7 +267,8 @@ namespace ICD.Connect.Themes
 			foreach (IConsoleCommand command in GetBaseConsoleCommands())
 				yield return command;
 
-			yield return new ConsoleCommand("PrintUIs", "Prints information about the current UIs", () => ConsolePrintUis());
+			foreach (IConsoleCommand command in ThemeConsole.GetConsoleCommands(this))
+				yield return command;
 		}
 
 		/// <summary>
@@ -180,25 +278,6 @@ namespace ICD.Connect.Themes
 		private IEnumerable<IConsoleCommand> GetBaseConsoleCommands()
 		{
 			return base.GetConsoleCommands();
-		}
-
-		private string ConsolePrintUis()
-		{
-			TableBuilder builder = new TableBuilder("Type", "Room", "Target");
-
-			foreach (IUserInterfaceFactory factory in GetUiFactories())
-			{
-				foreach (IUserInterface ui in factory.GetUserInterfaces())
-				{
-					Type type = ui.GetType();
-					IRoom room = ui.Room;
-					object target = ui.Target;
-
-					builder.AddRow(type, room, target);
-				}
-			}
-
-			return builder.ToString();
 		}
 
 		#endregion
