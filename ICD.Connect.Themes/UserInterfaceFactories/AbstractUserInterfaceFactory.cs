@@ -156,7 +156,7 @@ namespace ICD.Connect.Themes.UserInterfaceFactories
 		/// Gets the rooms for the user interfaces.
 		/// </summary>
 		/// <returns></returns>
-		private IEnumerable<IRoom> GetRooms()
+		protected virtual IEnumerable<IRoom> GetRooms()
 		{
 			IPartitionManager manager;
 			return m_Theme.Core.TryGetPartitionManager(out manager)
