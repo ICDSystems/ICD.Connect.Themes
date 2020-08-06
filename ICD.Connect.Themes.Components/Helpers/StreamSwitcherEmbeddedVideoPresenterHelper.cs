@@ -1,7 +1,7 @@
 ﻿using System;
 using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
-using ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge;
+using ICD.Connect.Panels.Crestron.Controls.Streaming.Dge;
 using ICD.Connect.Routing;
 
 namespace ICD.Connect.Themes.Components.Helpers

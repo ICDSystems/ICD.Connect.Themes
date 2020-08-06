@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Fixed a bug on program stop where UI factories would attempt to lookup rooms
  - Common theme logic moved into abstraction
 
+## [5.1.1] - 2020-08-06
+### Changed
+ - Changed DgeX00 interfaces to new namespace
+ - Removed references to CrestronPro projects
+
 ## [5.1.0] - 2020-06-30
 ### Added
  - Added Themes.Components project
