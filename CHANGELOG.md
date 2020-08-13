@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.1.0] - 2020-08-13
+### Changed
+ - UI Factory GetRooms method is virtual - Allows implementations to select rooms for binding
+
 ## [6.0.0] - 2020-06-22
 ### Changed
  - Fixed a bug on program stop where UI factories would attempt to lookup rooms
