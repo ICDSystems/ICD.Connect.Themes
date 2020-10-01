@@ -15,7 +15,7 @@ namespace ICD.Connect.Themes
 	public abstract class AbstractTheme<TSettings> : AbstractOriginator<TSettings>, ITheme
 		where TSettings : IThemeSettings, new()
 	{
-		private bool m_CoreSettingsApplied;
+		private bool m_CoreSettingsStarted;
 		private ICore m_Core;
 
 		/// <summary>
@@ -29,7 +29,7 @@ namespace ICD.Connect.Themes
 		protected AbstractTheme()
 		{
 			IcdEnvironment.OnProgramInitializationComplete += IcdEnvironmentOnProgramInitializationComplete;
-			Core.OnSettingsApplied += CoreOnSettingsApplied;
+			Core.OnLifecycleStateChanged += CoreOnLifecycleStateChanged;
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace ICD.Connect.Themes
 		protected override void DisposeFinal(bool disposing)
 		{
 			IcdEnvironment.OnProgramInitializationComplete -= IcdEnvironmentOnProgramInitializationComplete;
-			Core.OnSettingsApplied -= CoreOnSettingsApplied;
+			Core.OnLifecycleStateChanged -= CoreOnLifecycleStateChanged;
 
 			base.DisposeFinal(disposing);
 
@@ -74,8 +74,6 @@ namespace ICD.Connect.Themes
 		{
 			base.ApplySettingsFinal(settings, factory);
 
-			m_CoreSettingsApplied = false;
-
 			BuildUserInterfaces();
 		}
 
@@ -91,16 +89,16 @@ namespace ICD.Connect.Themes
 
 		#region Program Initialization Callbacks
 
-		/// <summary>
-		/// Called when the Core finishes applying settings.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="eventArgs"></param>
-		private void CoreOnSettingsApplied(object sender, EventArgs eventArgs)
+		private void CoreOnLifecycleStateChanged(object sender, LifecycleStateEventArgs args)
 		{
-			m_CoreSettingsApplied = true;
-
-			ActivateUserInterfacesIfReady();
+			if (args.Data == eLifecycleState.Started)
+			{
+				m_CoreSettingsStarted = true;
+				ActivateUserInterfacesIfReady();
+			}
+			else
+				m_CoreSettingsStarted = false;
+			
 		}
 
 		/// <summary>
@@ -115,7 +113,7 @@ namespace ICD.Connect.Themes
 
 		private void ActivateUserInterfacesIfReady()
 		{
-			if (m_CoreSettingsApplied && IcdEnvironment.ProgramIsInitialized)
+			if (m_CoreSettingsStarted && IcdEnvironment.ProgramIsInitialized)
 				ActivateUserInterfaces();
 		}
 
