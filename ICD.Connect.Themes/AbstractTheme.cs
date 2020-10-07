@@ -31,8 +31,8 @@ namespace ICD.Connect.Themes
 		protected AbstractTheme()
 		{
 			IcdEnvironment.OnProgramInitializationComplete += IcdEnvironmentOnProgramInitializationComplete;
-			Core.OnSettingsApplied += CoreOnSettingsApplied;
 			Core.Originators.OnChildrenChanged += OriginatorsOnChildrenChanged;
+			Core.OnLifecycleStateChanged += CoreOnLifecycleStateChanged;
 		}
 
 		/// <summary>
@@ -42,8 +42,8 @@ namespace ICD.Connect.Themes
 		protected override void DisposeFinal(bool disposing)
 		{
 			IcdEnvironment.OnProgramInitializationComplete -= IcdEnvironmentOnProgramInitializationComplete;
-			Core.OnSettingsApplied -= CoreOnSettingsApplied;
 			Core.Originators.OnChildrenChanged -= OriginatorsOnChildrenChanged;
+			Core.OnLifecycleStateChanged -= CoreOnLifecycleStateChanged;
 
 			base.DisposeFinal(disposing);
 
@@ -99,16 +99,15 @@ namespace ICD.Connect.Themes
 
 		#region Program Initialization Callbacks
 
-		/// <summary>
-		/// Called when the Core finishes applying settings.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="eventArgs"></param>
-		private void CoreOnSettingsApplied(object sender, EventArgs eventArgs)
+		private void CoreOnLifecycleStateChanged(object sender, LifecycleStateEventArgs args)
 		{
-			m_CoreSettingsApplied = true;
-
-			ActivateUserInterfacesIfReady();
+			if (args.Data == eLifecycleState.Started)
+			{
+				m_CoreSettingsApplied = true;
+				ActivateUserInterfacesIfReady();
+			}
+			else
+				m_CoreSettingsApplied = false;
 		}
 
 		/// <summary>

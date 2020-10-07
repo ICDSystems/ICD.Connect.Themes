@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Fixed a bug on program stop where UI factories would attempt to lookup rooms
  - Common theme logic moved into abstraction
 
+## [5.2.0] - 2020-10-06
+### Changed
+ - UIs are activated as part of lifecycle change
+ - UI factories expose virtual GetRooms() method
+
 ## [5.1.1] - 2020-08-06
 ### Changed
  - Changed DgeX00 interfaces to new namespace
