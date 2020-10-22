@@ -31,7 +31,7 @@ namespace ICD.Connect.Themes
 		protected AbstractTheme()
 		{
 			IcdEnvironment.OnProgramInitializationComplete += IcdEnvironmentOnProgramInitializationComplete;
-			Core.Originators.OnChildrenChanged += OriginatorsOnChildrenChanged;
+			Core.Originators.OnCollectionChanged += OriginatorsOnCollectionChanged;
 			Core.OnLifecycleStateChanged += CoreOnLifecycleStateChanged;
 		}
 
@@ -42,7 +42,7 @@ namespace ICD.Connect.Themes
 		protected override void DisposeFinal(bool disposing)
 		{
 			IcdEnvironment.OnProgramInitializationComplete -= IcdEnvironmentOnProgramInitializationComplete;
-			Core.Originators.OnChildrenChanged -= OriginatorsOnChildrenChanged;
+			Core.Originators.OnCollectionChanged -= OriginatorsOnCollectionChanged;
 			Core.OnLifecycleStateChanged -= CoreOnLifecycleStateChanged;
 
 			base.DisposeFinal(disposing);
@@ -115,7 +115,7 @@ namespace ICD.Connect.Themes
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="eventArgs"></param>
-		private void OriginatorsOnChildrenChanged(object sender, EventArgs eventArgs)
+		private void OriginatorsOnCollectionChanged(object sender, EventArgs eventArgs)
 		{
 			ReassignRooms();
 		}
