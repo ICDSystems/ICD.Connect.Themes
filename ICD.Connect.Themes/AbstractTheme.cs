@@ -147,6 +147,9 @@ namespace ICD.Connect.Themes
 		/// <param name="factory"></param>
 		protected override void ApplySettingsFinal(TSettings settings, IDeviceFactory factory)
 		{
+			// Ensure the rooms are loaded
+			factory.LoadOriginators<IRoom>();
+
 			base.ApplySettingsFinal(settings, factory);
 
 			m_CoreSettingsApplied = false;
