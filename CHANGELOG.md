@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.1.1] - 2021-05-14
 ### Changed
  - Themes ensure rooms are loaded before applying settings
 
