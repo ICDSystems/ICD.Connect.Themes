@@ -4,6 +4,7 @@ using ICD.Common.Utils;
 using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Partitioning.Rooms;
+using ICD.Connect.Settings.Originators;
 using ICD.Connect.Themes.UiBindings;
 using ICD.Connect.Themes.UserInterfaceFactories;
 using ICD.Connect.Themes.UserInterfaces;
@@ -55,7 +56,12 @@ namespace ICD.Connect.Themes
 			TableBuilder builder = new TableBuilder("UI Binding", "Originator");
 
 			foreach (IUiBinding binding in instance.UiBindings)
-				builder.AddRow(binding, binding.Originator);
+			{
+				foreach (IOriginator originator in binding.GetOriginators())
+				{
+					builder.AddRow(binding, originator);
+				}
+			}
 
 			return builder.ToString();
 		}
