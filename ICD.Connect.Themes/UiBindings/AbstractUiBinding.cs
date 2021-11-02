@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Settings;
 using ICD.Connect.Settings.Originators;
@@ -32,12 +34,38 @@ namespace ICD.Connect.Themes.UiBindings
 		where TSettings : IUiBindingSettings1Originator, new()
 		where TOriginator1 : class, IOriginator
 	{
+		#region Events
+
+		public event EventHandler OnOriginator1Changed;
+
+		#endregion
+
+		#region Fields
+
+		private TOriginator1 m_Originator1;
+
+		#endregion
+
 		#region Properties
 
 		/// <summary>
 		/// Gets the first originator that is bound against.
 		/// </summary>
-		public TOriginator1 Originator1 { get; private set; }
+		public TOriginator1 Originator1 { get { return m_Originator1; }
+			private set
+			{
+				if (m_Originator1 == value)
+					return;
+
+				UnsubscribeOriginator1(m_Originator1);
+
+				m_Originator1 = value;
+
+				SubscribeOriginator1(m_Originator1);
+
+				OnOriginator1Changed.Raise(this);
+			} 
+		}
 
 		#endregion
 
@@ -46,6 +74,26 @@ namespace ICD.Connect.Themes.UiBindings
 		public override IEnumerable<IOriginator> GetOriginators()
 		{
 			yield return Originator1;
+		}
+
+		#endregion
+
+		#region Originator1 Callbacks
+
+		/// <summary>
+		/// Subscribe to Originator1 events
+		/// </summary>
+		/// <param name="originator1"></param>
+		protected virtual void SubscribeOriginator1(TOriginator1 originator1)
+		{
+		}
+
+		/// <summary>
+		/// Unsubscribe from Originator1 events
+		/// </summary>
+		/// <param name="originator1"></param>
+		protected virtual void UnsubscribeOriginator1(TOriginator1 originator1)
+		{
 		}
 
 		#endregion
@@ -95,12 +143,40 @@ namespace ICD.Connect.Themes.UiBindings
 		where TOriginator1 : class, IOriginator
 		where TOriginator2 : class, IOriginator
 	{
+		#region Events
+
+		public event EventHandler OnOriginator2Changed;
+
+		#endregion
+
+		#region Fields
+
+		private TOriginator2 m_Originator2;
+
+		#endregion
+
 		#region Properties
 
 		/// <summary>
-		/// Gets the second originator that is bound against.
+		/// Gets the first originator that is bound against.
 		/// </summary>
-		public TOriginator2 Originator2 { get; private set; }
+		public TOriginator2 Originator2
+		{
+			get { return m_Originator2; }
+			private set
+			{
+				if (m_Originator2 == value)
+					return;
+
+				UnsubscribeOriginator2(m_Originator2);
+
+				m_Originator2 = value;
+
+				SubscribeOriginator2(m_Originator2);
+
+				OnOriginator2Changed.Raise(this);
+			}
+		}
 
 		#endregion
 
@@ -108,8 +184,35 @@ namespace ICD.Connect.Themes.UiBindings
 
 		public override IEnumerable<IOriginator> GetOriginators()
 		{
-			yield return Originator1;
+			foreach (IOriginator originator in GetBaseOriginstors())
+				yield return originator;
+
 			yield return Originator2;
+		}
+
+		private IEnumerable<IOriginator> GetBaseOriginstors()
+		{
+			return base.GetOriginators();
+		}
+
+		#endregion
+
+		#region Originator2 Callbacks
+
+		/// <summary>
+		/// Subscribe to Originator2 events
+		/// </summary>
+		/// <param name="originator2"></param>
+		protected virtual void SubscribeOriginator2(TOriginator2 originator2)
+		{
+		}
+
+		/// <summary>
+		/// Unsubscribe from Originator2 events
+		/// </summary>
+		/// <param name="originator2"></param>
+		protected virtual void UnsubscribeOriginator2(TOriginator2 originator2)
+		{
 		}
 
 		#endregion
@@ -134,13 +237,13 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.ApplySettingsFinal(settings, factory);
 
-			TOriginator2 originator2 = null;
+			TOriginator2 originator = null;
 
 			if (settings.Originator2Id != null)
 			{
 				try
 				{
-					originator2 = factory.GetOriginatorById((int)settings.Originator2Id) as TOriginator2;
+					originator = factory.GetOriginatorById((int)settings.Originator2Id) as TOriginator2;
 				}
 				catch (KeyNotFoundException)
 				{
@@ -148,7 +251,7 @@ namespace ICD.Connect.Themes.UiBindings
 				}
 			}
 
-			Originator2 = originator2;
+			Originator2 = originator;
 		}
 
 		#endregion
@@ -160,12 +263,40 @@ namespace ICD.Connect.Themes.UiBindings
 		where TOriginator2 : class, IOriginator
 		where TOriginator3 : class, IOriginator
 	{
+		#region Events
+
+		public event EventHandler OnOriginator3Changed;
+
+		#endregion
+
+		#region Fields
+
+		private TOriginator3 m_Originator3;
+
+		#endregion
+
 		#region Properties
 
 		/// <summary>
-		/// Gets the third originator that is bound against.
+		/// Gets the first originator that is bound against.
 		/// </summary>
-		public TOriginator3 Originator3 { get; private set; }
+		public TOriginator3 Originator3
+		{
+			get { return m_Originator3; }
+			private set
+			{
+				if (m_Originator3 == value)
+					return;
+
+				UnsubscribeOriginator3(m_Originator3);
+
+				m_Originator3 = value;
+
+				SubscribeOriginator3(m_Originator3);
+
+				OnOriginator3Changed.Raise(this);
+			}
+		}
 
 		#endregion
 
@@ -173,9 +304,35 @@ namespace ICD.Connect.Themes.UiBindings
 
 		public override IEnumerable<IOriginator> GetOriginators()
 		{
-			yield return Originator1;
-			yield return Originator2;
+			foreach (IOriginator originator in GetBaseOriginstors())
+				yield return originator;
+
 			yield return Originator3;
+		}
+
+		private IEnumerable<IOriginator> GetBaseOriginstors()
+		{
+			return base.GetOriginators();
+		}
+
+		#endregion
+
+		#region Originator3 Callbacks
+
+		/// <summary>
+		/// Subscribe to Originator3 events
+		/// </summary>
+		/// <param name="originator3"></param>
+		protected virtual void SubscribeOriginator3(TOriginator3 originator3)
+		{
+		}
+
+		/// <summary>
+		/// Unsubscribe from Originator3 events
+		/// </summary>
+		/// <param name="originator3"></param>
+		protected virtual void UnsubscribeOriginator3(TOriginator3 originator3)
+		{
 		}
 
 		#endregion
@@ -200,13 +357,13 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.ApplySettingsFinal(settings, factory);
 
-			TOriginator3 originator3 = null;
+			TOriginator3 originator = null;
 
 			if (settings.Originator3Id != null)
 			{
 				try
 				{
-					originator3 = factory.GetOriginatorById((int)settings.Originator3Id) as TOriginator3;
+					originator = factory.GetOriginatorById((int)settings.Originator3Id) as TOriginator3;
 				}
 				catch (KeyNotFoundException)
 				{
@@ -214,7 +371,7 @@ namespace ICD.Connect.Themes.UiBindings
 				}
 			}
 
-			Originator3 = originator3;
+			Originator3 = originator;
 		}
 
 		#endregion
@@ -227,12 +384,40 @@ namespace ICD.Connect.Themes.UiBindings
 		where TOriginator3 : class, IOriginator
 		where TOriginator4 : class, IOriginator
 	{
+		#region Events
+
+		public event EventHandler OnOriginator4Changed;
+
+		#endregion
+
+		#region Fields
+
+		private TOriginator4 m_Originator4;
+
+		#endregion
+
 		#region Properties
 
 		/// <summary>
-		/// Gets the fourth originator that is bound against.
+		/// Gets the first originator that is bound against.
 		/// </summary>
-		public TOriginator4 Originator4 { get; private set; }
+		public TOriginator4 Originator4
+		{
+			get { return m_Originator4; }
+			private set
+			{
+				if (m_Originator4 == value)
+					return;
+
+				UnsubscribeOriginator4(m_Originator4);
+
+				m_Originator4 = value;
+
+				SubscribeOriginator4(m_Originator4);
+
+				OnOriginator4Changed.Raise(this);
+			}
+		}
 
 		#endregion
 
@@ -240,10 +425,35 @@ namespace ICD.Connect.Themes.UiBindings
 
 		public override IEnumerable<IOriginator> GetOriginators()
 		{
-			yield return Originator1;
-			yield return Originator2;
-			yield return Originator3;
+			foreach (IOriginator originator in GetBaseOriginstors())
+				yield return originator;
+
 			yield return Originator4;
+		}
+
+		private IEnumerable<IOriginator> GetBaseOriginstors()
+		{
+			return base.GetOriginators();
+		}
+
+		#endregion
+
+		#region Originator4 Callbacks
+
+		/// <summary>
+		/// Subscribe to Originator4 events
+		/// </summary>
+		/// <param name="originator4"></param>
+		protected virtual void SubscribeOriginator4(TOriginator4 originator4)
+		{
+		}
+
+		/// <summary>
+		/// Unsubscribe from Originator4 events
+		/// </summary>
+		/// <param name="originator4"></param>
+		protected virtual void UnsubscribeOriginator4(TOriginator4 originator4)
+		{
 		}
 
 		#endregion
@@ -268,13 +478,13 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.ApplySettingsFinal(settings, factory);
 
-			TOriginator4 originator4 = null;
+			TOriginator4 originator = null;
 
 			if (settings.Originator4Id != null)
 			{
 				try
 				{
-					originator4 = factory.GetOriginatorById((int)settings.Originator4Id) as TOriginator4;
+					originator = factory.GetOriginatorById((int)settings.Originator4Id) as TOriginator4;
 				}
 				catch (KeyNotFoundException)
 				{
@@ -282,9 +492,8 @@ namespace ICD.Connect.Themes.UiBindings
 				}
 			}
 
-			Originator4 = originator4;
+			Originator4 = originator;
 		}
-
 		#endregion
 	}
 }
