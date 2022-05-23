@@ -11,7 +11,7 @@ namespace ICD.Connect.Themes.UiBindings
 
 	public abstract class AbstractUiBindingSettings1Originator : AbstractUiBindingSettings, IUiBindingSettings1Originator
 	{
-		private const string ELEMENT_ORIGINATOR = "Originator1";
+		protected virtual string Originator1Element { get { return "Originator1"; } }
 
 		[OriginatorIdSettingsProperty(typeof(IOriginator))]
 		public int? Originator1Id { get; set; }
@@ -24,7 +24,7 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.WriteElements(writer);
 
-			writer.WriteElementString(ELEMENT_ORIGINATOR, IcdXmlConvert.ToString(Originator1Id));
+			writer.WriteElementString(Originator1Element, IcdXmlConvert.ToString(Originator1Id));
 		}
 
 		/// <summary>
@@ -35,13 +35,13 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.ParseXml(xml);
 
-			Originator1Id = XmlUtils.TryReadChildElementContentAsInt(xml, ELEMENT_ORIGINATOR);
+			Originator1Id = XmlUtils.TryReadChildElementContentAsInt(xml, Originator1Element);
 		}
 	}
 
 	public abstract class AbstractUiBindingSettings2Originators : AbstractUiBindingSettings1Originator, IUiBindingSettings2Originators
 	{
-		private const string ELEMENT_ORIGINATOR = "Originator2";
+		protected virtual string Originator2Element{get { return "Originator2"; }}
 
 		[OriginatorIdSettingsProperty(typeof(IOriginator))]
 		public int? Originator2Id { get; set; }
@@ -54,7 +54,7 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.WriteElements(writer);
 
-			writer.WriteElementString(ELEMENT_ORIGINATOR, IcdXmlConvert.ToString(Originator2Id));
+			writer.WriteElementString(Originator2Element, IcdXmlConvert.ToString(Originator2Id));
 		}
 
 		/// <summary>
@@ -65,13 +65,13 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.ParseXml(xml);
 
-			Originator2Id = XmlUtils.TryReadChildElementContentAsInt(xml, ELEMENT_ORIGINATOR);
+			Originator2Id = XmlUtils.TryReadChildElementContentAsInt(xml, Originator2Element);
 		}
 	}
 
 	public abstract class AbstractUiBindingSettings3Originators : AbstractUiBindingSettings2Originators, IUiBindingSettings3Originators
 	{
-		private const string ELEMENT_ORIGINATOR = "Originator3";
+		protected virtual string Originator3Element{get { return "Originator3"; }}
 
 		[OriginatorIdSettingsProperty(typeof(IOriginator))]
 		public int? Originator3Id { get; set; }
@@ -84,7 +84,7 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.WriteElements(writer);
 
-			writer.WriteElementString(ELEMENT_ORIGINATOR, IcdXmlConvert.ToString(Originator3Id));
+			writer.WriteElementString(Originator3Element, IcdXmlConvert.ToString(Originator3Id));
 		}
 
 		/// <summary>
@@ -95,13 +95,13 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.ParseXml(xml);
 
-			Originator3Id = XmlUtils.TryReadChildElementContentAsInt(xml, ELEMENT_ORIGINATOR);
+			Originator3Id = XmlUtils.TryReadChildElementContentAsInt(xml, Originator3Element);
 		}
 	}
 
 	public abstract class AbstractUiBindingSettings4Originators : AbstractUiBindingSettings3Originators, IUiBindingSettings4Originators
 	{
-		private const string ELEMENT_ORIGINATOR = "Originator4";
+		protected virtual string Originator4Element { get { return "Originator4"; } }
 
 		[OriginatorIdSettingsProperty(typeof(IOriginator))]
 		public int? Originator4Id { get; set; }
@@ -114,7 +114,7 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.WriteElements(writer);
 
-			writer.WriteElementString(ELEMENT_ORIGINATOR, IcdXmlConvert.ToString(Originator4Id));
+			writer.WriteElementString(Originator4Element, IcdXmlConvert.ToString(Originator4Id));
 		}
 
 		/// <summary>
@@ -125,7 +125,7 @@ namespace ICD.Connect.Themes.UiBindings
 		{
 			base.ParseXml(xml);
 
-			Originator4Id = XmlUtils.TryReadChildElementContentAsInt(xml, ELEMENT_ORIGINATOR);
+			Originator4Id = XmlUtils.TryReadChildElementContentAsInt(xml, Originator4Element);
 		}
 	}
 }
