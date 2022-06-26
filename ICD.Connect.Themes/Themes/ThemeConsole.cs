@@ -23,7 +23,7 @@ namespace ICD.Connect.Themes
 			if (instance == null)
 				throw new ArgumentNullException("instance");
 
-			yield break;
+			yield return ConsoleNodeGroup.KeyNodeMap("UiBindings", instance.UiBindings, b => (uint)b.Id);
 		}
 
 		/// <summary>
