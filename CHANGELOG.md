@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Added UiBinding access to theme console
  - AbstractUiBindingSettings now allow overriding originator element names
+ - Updated Crestron SDK to 2.18.96
 
 ## [6.2.0] - 2022-05-23
 ### Added
