@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.4.1] - 2023-01-04
+### Changed
+ - Fixed reference for NetStandard project
+
 ## [6.4.0] - 2022-12-24
 ### Changed
  - Added ICD.Connect.Themes.Crosspoints project with XP3 UI Bindings
