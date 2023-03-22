@@ -66,7 +66,6 @@
     <Compile Include="Extensions\DeviceFactoryExtensions.cs" />
     <Compile Include="Themes\ITheme.cs" />
     <Compile Include="Themes\IThemeSettings.cs" />
-    <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Themes\ThemeConsole.cs" />
     <Compile Include="UiBindings\AbstractUiBinding.cs" />
@@ -111,7 +110,4 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>rem S# Pro preparation will execute after these operations</PostBuildEvent>
-  </PropertyGroup>
 </Project>
